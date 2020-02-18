@@ -26,8 +26,37 @@ router.post('/', (req, res) => {
     .catch(error => {
         res.status(500).json({ message: "Error occurred. Car not created"});
     });
+});
 
+//edit a car by id
+router.put('/:id', (req, res) => {
+    const id = req.params.id;
+    const change = req.body;
 
+    carsDB('cars')
+    .where({ id })
+    .update(change)
+    .then(count => {
+        res.status(200).json({ message: "Successfully updated"});
+    })
+    .catch(error => {
+        res.status(500).json({ message: "Error while updating. Changes failed"});
+    });
+});
+
+//delete car by id
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+
+    carsDB('cars')
+    .where({ id })
+    .del()
+    .then(car =>{
+        res.status(200).json({ message: "Car successfully deleted"});
+    })
+    .catch(error => {
+        res.status(500).json({ message: "Error while processing. Failed to delete"});
+    });
 });
 
 module.exports = router;
